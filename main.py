@@ -76,6 +76,7 @@ class DemoApp(MDApp):
 
     def start(self, minTime, minDistance):
         gps.start(minTime, minDistance)
+        print(self.gps_location)
         gps.stop()
 
     def stop(self):
