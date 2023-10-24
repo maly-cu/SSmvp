@@ -100,7 +100,7 @@ class DemoApp(MDApp):
         dialog = MDDialog(
                 title="Location Error",
                 text="App needs Location enabled to function properly",
-                buttons=[MDFlatButton(text="OK").bind(on_press=self.on_resume()), ], )  # To add button in dialogue box
+                buttons=[MDFlatButton(text="OK"), ], )  # To add button in dialogue box
         dialog.size_hint = [.8, .8]
         dialog.pos_hint = {'center_x': .5, 'center_y': .5}
         dialog.open()
