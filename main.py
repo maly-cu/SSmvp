@@ -32,7 +32,7 @@ class HomePage(Screen):
 
 
 class DemoApp(MDApp):
-    gps_location = StringProperty()
+    gps_location = StringProperty(defaultvalue="Getting Location")
     gps_status = StringProperty('Click Start to get GPS location updates')
 
     # def on_start(self):
@@ -101,6 +101,10 @@ class DemoApp(MDApp):
             print("------------- GPS STARTING -------------")
             gps.start(1000, 0)
             print(f"Co-ords - {self.gps_location}")
+
+            if self.gps_location != "Getting Location":
+                print("------------- GPS STOPPING -------------")
+                gps.stop()
 
 
         # ------------------- Build kv file -------------------
