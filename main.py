@@ -99,18 +99,9 @@ class DemoApp(MDApp):
             self.request_android_permissions()
 
             print("------------- GPS STARTING -------------")
-            gps.start(7000, 0)
+            gps.start(1000, 0)
             print(f"Co-ords - {self.gps_location}")
 
-            gps.stop()
-            print("------------- GPS STOPPED -------------")
-            print(f"Final GPS coordinates: {self.gps_location}")
-
-        print("******** Trying time delay ********")
-        time.sleep(7)
-        gps.start(7000, 0)
-        print(f"Co-ords - {self.gps_location}")
-        gps.stop()
 
         # ------------------- Build kv file -------------------
         main_kv = Builder.load_file("demo.kv")
