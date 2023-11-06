@@ -98,13 +98,15 @@ class DemoApp(MDApp):
             print("gps.py: Android detected. Requesting permissions")
             self.request_android_permissions()
 
-            while self.gps_location != "Getting Location":
-                print("------------- GPS STARTING -------------")
-                gps.start(1000, 0)
-                print(f"Co-ords - {self.gps_location}")
-            else:
-                print("------------- GPS STOPPING -------------")
-                gps.stop()
+            print("------------- GPS STARTING -------------")
+            gps.start(1000, 0)
+            print(f"--------- Co-ords - {self.gps_location} ---------")
+
+            time.sleep(10)
+
+            print("------------- GPS STOPPING -------------")
+            gps.stop()
+            print(f"--------- Final Co-ords - {self.gps_location} ---------")
 
 
         # ------------------- Build kv file -------------------
