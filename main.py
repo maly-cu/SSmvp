@@ -99,7 +99,7 @@ class DemoApp(MDApp):
             self.request_android_permissions()
 
             print("------------- GPS STARTING -------------")
-            gps.start(1000, 0)
+            gps.start(3000, 0)
             print(f"Co-ords - {self.gps_location}")
 
             if self.gps_location != "Getting Location":
