@@ -86,13 +86,13 @@ class DemoApp(MDApp):
     def on_start(self):
         self.theme_cls.primary_palette = "Orange"  # to set theme color for dialogue box
 
-        try:
-            gps.configure(on_location=self.on_location,
-                          on_status=self.on_status)
-        except NotImplementedError:
-            import traceback
-            traceback.print_exc()
-            self.gps_status = 'GPS is not implemented for your platform'
+        # try:
+        gps.configure(on_location=self.on_location,
+                      on_status=self.on_status)
+        # except NotImplementedError:
+        #     import traceback
+        #     traceback.print_exc()
+        #     self.gps_status = 'GPS is not implemented for your platform'
 
         if platform == "android":
             print("gps.py: Android detected. Requesting permissions")
