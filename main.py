@@ -98,11 +98,11 @@ class DemoApp(MDApp):
             print("gps.py: Android detected. Requesting permissions")
             self.request_android_permissions()
 
-            print("------------- GPS STARTING -------------")
-            gps.start(3000, 0)
-            print(f"Co-ords - {self.gps_location}")
-
-            if self.gps_location != "Getting Location":
+            while self.gps_location != "Getting Location":
+                print("------------- GPS STARTING -------------")
+                gps.start(1000, 0)
+                print(f"Co-ords - {self.gps_location}")
+            else:
                 print("------------- GPS STOPPING -------------")
                 gps.stop()
 
