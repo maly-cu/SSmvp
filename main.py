@@ -87,8 +87,8 @@ class DemoApp(MDApp):
         self.theme_cls.primary_palette = "Orange"  # to set theme color for dialogue box
 
         # try:
-        gps.configure(on_location=self.on_location,
-                      on_status=self.on_status)
+        #     gps.configure(on_location=self.on_location,
+        #                   on_status=self.on_status)
         # except NotImplementedError:
         #     import traceback
         #     traceback.print_exc()
@@ -97,17 +97,30 @@ class DemoApp(MDApp):
         if platform == "android":
             print("gps.py: Android detected. Requesting permissions")
             self.request_android_permissions()
+            gps.configure(on_location=self.on_location,
+                          on_status=self.on_status)
 
+            print("------------- GPS STARTING -------------")
             gps.start(1000, 0)
+            print(f"--------- Co-ords - {self.gps_location} ---------")
 
-            while self.gps_location == "Getting Location":
-                print("------------- GPS STARTING -------------")
-                print(f"--------- Co-ords - {self.gps_location} ---------")
-            else:
-                time.sleep(2)
-                print("------------- GPS STOPPING -------------")
-                gps.stop()
-                print(f"--------- Final Co-ords - {self.gps_location} ---------")
+            Clock.schedule_once(self.stop, 5) # after 5 secs, stop gps
+
+    def stop(self):
+        if self.gps_location != "Getting Location":
+            print("------------- GPS STOPPING -------------")
+            gps.stop()
+            print(f"--------- Final Co-ords - {self.gps_location} ---------")
+
+
+            # while self.gps_location == "Getting Location":
+            #     print("------------- GPS STARTING -------------")
+            #     print(f"--------- Co-ords - {self.gps_location} ---------")
+            # else:
+            #     time.sleep(2)
+            #     print("------------- GPS STOPPING -------------")
+            #     gps.stop()
+            #     print(f"--------- Final Co-ords - {self.gps_location} ---------")
 
 
         # ------------------- Build kv file -------------------
@@ -119,9 +132,6 @@ class DemoApp(MDApp):
     #     print("GPS STARTING")
     #     print(self.gps_location)
     #
-    # def stop(self):
-    #     gps.stop()
-    #     print("GPS STOPPED")
 
     @mainthread
     def on_location(self, **kwargs):
