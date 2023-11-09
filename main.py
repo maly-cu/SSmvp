@@ -107,7 +107,7 @@ class DemoApp(MDApp):
             Clock.schedule_once(self.stop_gps, 5) # after 5 secs, stop gps
             print(f"--------- After 5 seconds, coords - {self.gps_location} ---------")
 
-    def stop_gps(self):
+    def stop_gps(self, dt):
         if self.gps_location != "Getting Location":
             print("------------- GPS STOPPING -------------")
             gps.stop()
