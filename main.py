@@ -86,26 +86,29 @@ class DemoApp(MDApp):
     def on_start(self):
         self.theme_cls.primary_palette = "Orange"  # to set theme color for dialogue box
 
-        # try:
-        #     gps.configure(on_location=self.on_location,
-        #                   on_status=self.on_status)
-        # except NotImplementedError:
-        #     import traceback
-        #     traceback.print_exc()
-        #     self.gps_status = 'GPS is not implemented for your platform'
+        try:
+            gps.configure(on_location=self.on_location,
+                          on_status=self.on_status)
+        except NotImplementedError:
+            import traceback
+            traceback.print_exc()
+            self.gps_status = 'GPS is not implemented for your platform'
 
         if platform == "android":
             print("gps.py: Android detected. Requesting permissions")
             self.request_android_permissions()
-            gps.configure(on_location=self.on_location,
-                          on_status=self.on_status)
+            # gps.configure(on_location=self.on_location,
+            #               on_status=self.on_status)
 
-            print("------------- GPS STARTING -------------")
-            gps.start(1000, 0)
-            print(f"--------- Co-ords - {self.gps_location} ---------")
+            self.start_gps(1000, 0)
 
             Clock.schedule_once(self.stop_gps, 5) # after 5 secs, stop gps
             print(f"--------- After 5 seconds, coords - {self.gps_location} ---------")
+
+    def start_gps(self, minTime, minDistance):
+        gps.start(minTime, minDistance)
+        print("------------- GPS STARTING -------------")
+        print(f"--------- Co-ords - {self.gps_location} ---------")
 
     def stop_gps(self, dt):
         if self.gps_location != "Getting Location":
@@ -114,25 +117,10 @@ class DemoApp(MDApp):
             print(f"--------- Final Co-ords - {self.gps_location} ---------")
 
 
-            # while self.gps_location == "Getting Location":
-            #     print("------------- GPS STARTING -------------")
-            #     print(f"--------- Co-ords - {self.gps_location} ---------")
-            # else:
-            #     time.sleep(2)
-            #     print("------------- GPS STOPPING -------------")
-            #     gps.stop()
-            #     print(f"--------- Final Co-ords - {self.gps_location} ---------")
-
-
         # ------------------- Build kv file -------------------
         main_kv = Builder.load_file("demo.kv")
         return main_kv
 
-    # def start(self, minTime, minDistance):
-    #     gps.start(minTime, minDistance)
-    #     print("GPS STARTING")
-    #     print(self.gps_location)
-    #
 
     @mainthread
     def on_location(self, **kwargs):
@@ -148,12 +136,11 @@ class DemoApp(MDApp):
 
     # Popup to tell you to turn on location for app
     def open_gps_access_popup(self):
-        self.on_pause()
+        self.stop_gps()
         print("GPS ERROR")
         dialog = MDDialog(
                 title="Location Error",
-                text="App needs Location enabled to function properly",
-                buttons=[MDFlatButton(text="OK"), ], )  # To add button in dialogue box
+                text="App needs Location enabled to function properly", )
         dialog.size_hint = [.8, .8]
         dialog.pos_hint = {'center_x': .5, 'center_y': .5}
         dialog.open()

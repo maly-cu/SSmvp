@@ -5,11 +5,14 @@ Navigator:  # eliminate "<>" to make this a root widget
 <HomePage>:
     BoxLayout:
         orientation: 'vertical'
-        spacing: '10dp'
+        spacing: '2dp'
 
         Label:
             text: app.gps_location
             color: 0,0,0,1
+        Label:
+            text: app.gps_status
+            color: 1,0,0,1
 
     # ------------------------------------ GPS -----------------------------------------
 #    Widget:
