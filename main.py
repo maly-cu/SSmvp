@@ -100,9 +100,10 @@ class DemoApp(MDApp):
             # gps.configure(on_location=self.on_location,
             #               on_status=self.on_status)
 
-            self.start_gps(1000, 0)
+            print(f"--------- After permissions, waiting 5 seconds ---------")
+            Clock.schedule_once(self.start_gps(1000, 0), 5)  # after 5 secs, start gps
 
-            Clock.schedule_once(self.stop_gps, 5) # after 5 secs, stop gps
+            Clock.schedule_once(self.stop_gps(0), 5)  # after 5 secs, stop gps
             print(f"--------- After 5 seconds, coords - {self.gps_location} ---------")
 
     def start_gps(self, minTime, minDistance):
@@ -136,7 +137,7 @@ class DemoApp(MDApp):
 
     # Popup to tell you to turn on location for app
     def open_gps_access_popup(self):
-        self.stop_gps()
+        self.stop_gps(0)
         print("GPS ERROR")
         dialog = MDDialog(
                 title="Location Error",
