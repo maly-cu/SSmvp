@@ -101,9 +101,9 @@ class DemoApp(MDApp):
             #               on_status=self.on_status)
 
             print(f"--------- After permissions, waiting 5 seconds ---------")
-            Clock.schedule_once(self.start_gps(), 5)  # after 5 secs, start gps
+            Clock.schedule_once(self.start_gps, 5)  # after 5 secs, start gps
 
-            Clock.schedule_once(self.stop_gps(), 5)  # after 5 secs, stop gps
+            Clock.schedule_once(self.stop_gps, 5)  # after 5 secs, stop gps
             print(f"--------- After 5 seconds, coords - {self.gps_location} ---------")
 
     def start_gps(self, dt):
