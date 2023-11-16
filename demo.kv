@@ -1,61 +1,70 @@
 Navigator:  # eliminate "<>" to make this a root widget
     HomePage:
         name: 'Home'  # name is required
+    AppNotification:
+        name: 'Notif'  # name is required
 
+    # ------------------------------------ GPS -----------------------------------------
 <HomePage>:
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
         spacing: '2dp'
 
-        Label:
+        MDLabel:
             text: app.gps_location
+            halign: 'center'
+            font_style: 'H5'
             color: 0,0,0,1
-        Label:
+
+        MDLabel:
             text: app.gps_status
+            halign: 'center'
             color: 1,0,0,1
 
-    # ------------------------------------ GPS -----------------------------------------
-#    Widget:
-#    BoxLayout:
-#        orientation: 'vertical'
-#        spacing: '10dp'
-#
-#        Label:
-#            text: app.gps_location
-#            color: 0,0,0,1
-#
-#        Label:
-#            text: app.gps_status
-#            color: 0,0,0,1
-#
-#        BoxLayout:
-#            size_hint_y: None
-#            height: '48dp'
-#            padding: '4dp'
-#
-#            ToggleButton:
-#                background_color: 250/255, 177/255, 109/255, 1
-#                background_normal: ''
-#                text: 'Start' if self.state == 'normal' else 'Stop'
-#                on_state:
-#                    app.start(1000, 0) if self.state == 'down' else \
-#                    app.stop()
-#
-#    AnchorLayout:
-#
-#        # position of Anchor Layout
-#        anchor_x: 'right'
-#        anchor_y: 'top'
-#        padding: '10dp'
-#
-#        MDRectangleFlatIconButton:
-#            text: "Notify   "
-#
-#            #md_bg_color: 250/255, 177/255, 109/255, 1
-#            #line_color: 250/255, 177/255, 109/255, 1
-#            #text_color: 1,1,1,1
-#
-#            on_release:
-#                app.root.current = "Notif"
-#                root.manager.transition.direction = "left"
 
+    MDAnchorLayout:
+
+        # position of Anchor Layout
+        anchor_x: 'right'
+        anchor_y: 'top'
+        padding: '10dp'
+
+        MDRectangleFlatIconButton:
+            text: "Notify   "
+
+            #md_bg_color: 250/255, 177/255, 109/255, 1
+            #line_color: 250/255, 177/255, 109/255, 1
+            #text_color: 1,1,1,1
+
+            on_release:
+                app.root.current = "Notif"
+                root.manager.transition.direction = "left"
+
+    # ------------------------------------ Notification -----------------------------------------
+<AppNotification>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: '2dp'
+        padding: '6dp'
+        md_bg_color: 'pink'
+
+        MDRoundFlatButton:
+            text: 'Notify Me'
+            font_style: 'H5'
+            on_release: app.do_notify()
+            md_bg_color: 'white'
+            valign: 'center'
+
+    MDAnchorLayout:
+
+        # position of Anchor Layout
+        anchor_x: 'left'
+        anchor_y: 'top'
+        padding: '10dp'
+
+        MDRectangleFlatIconButton:
+            text: "GPS   "
+
+            on_release:
+                app.root.current = "Home"
+                root.manager.transition.direction = "right"
