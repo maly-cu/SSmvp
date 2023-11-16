@@ -66,8 +66,8 @@ class DemoApp(MDApp):
             print("gps.py: Android detected. Requesting permissions")
             self.request_android_permissions()
 
-            print(f"--------- After permissions, waiting 3 seconds ---------")
-            Clock.schedule_once(self.start_gps, 3)  # after 5 secs, start gps
+            print(f"--------- After permissions, waiting 5 seconds ---------")
+            Clock.schedule_once(self.start_gps, 5)  # after 5 secs, start gps
 
             Clock.schedule_once(self.stop_gps, 9)  # after 5 secs, stop gps
             print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
@@ -120,23 +120,23 @@ class DemoApp(MDApp):
     #     # 4: Now get the information from the given list and parsed into a dictionary with raw function().
     #     self.map_location = geolocator.reverse(self.gps_location['lat'] + "," + self.gps_location['lon']).raw['address']
 
+    # TODO 2: Plyer Fancy notification with GPS coords
     def do_notify(self):
         title = 'Where are you??'
         message = self.gps_location
         ticker = 'ticker?'
-        mode = 'fancy'
         app_name = 'SunScream'
         app_icon = join(dirname(realpath(__file__)), 'plyer-icon.png')
 
-        kwargs = {'mode': mode, 'app_name': app_name, 'app_icon': app_icon,
+        kwargs = {'app_name': app_name, 'app_icon': app_icon,
                   'title': title, 'message': message, 'ticker': ticker}
         notification.notify(**kwargs)
+
 
 if __name__ == '__main__':
     DemoApp().run()
 
 
 
-# TODO 2: Plyer Fancy notification with GPS coords
 # TODO 3: Set alarm to send notification
 # TODO 4: UI/UX logo, splash screen, name & loading animation
