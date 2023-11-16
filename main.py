@@ -1,6 +1,6 @@
 import time
 from os.path import join, dirname, realpath
-from geopy.geocoders import Nominatim
+#from geopy.geocoders import Nominatim
 
 from plyer import gps
 from plyer import notification, vibrator
