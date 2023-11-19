@@ -77,6 +77,7 @@ class DemoApp(MDApp):
         if platform == "android":
             print("gps.py: Android detected. Requesting permissions")
             self.request_android_permissions()
+            print(f"Permissions status: {self.all_permissions_granted}")
 
             # Check if all permissions have been granted then get location
             if self.all_permissions_granted is True:
