@@ -53,6 +53,8 @@ class DemoApp(MDApp):
             if all([res for res in results]):
                 print(f"callback. All permissions granted.\nResults: {results}\nPermissions: {permissions}")
                 self.all_permissions_granted = True
+                print(f"All Permissions set to: {self.all_permissions_granted}")
+
             else:
                 print(f"callback. Some permissions refused.\nResults: {results}\nPermissions: {permissions}")
 
