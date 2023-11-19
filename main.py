@@ -38,7 +38,7 @@ class AppNotification(Screen):
 class DemoApp(MDApp):
     gps_location = StringProperty(defaultvalue="Getting Location")
     gps_status = StringProperty('Click Start to get GPS location updates')
-
+    all_permissions_granted = False
 
     def request_android_permissions(self):
         """
@@ -52,11 +52,13 @@ class DemoApp(MDApp):
             This is not strictly required, but added for the sake of completeness. """
             if all([res for res in results]):
                 print(f"callback. All permissions granted.\nResults: {results}\nPermissions: {permissions}")
+                self.all_permissions_granted = True
             else:
                 print(f"callback. Some permissions refused.\nResults: {results}\nPermissions: {permissions}")
 
         request_permissions([Permission.ACCESS_COARSE_LOCATION,
-                             Permission.ACCESS_FINE_LOCATION], callback)
+                             Permission.ACCESS_FINE_LOCATION,
+                             Permission.INTERNET], callback)
         # To request permissions without a callback, do:
         # request_permissions([Permission.ACCESS_COARSE_LOCATION,
         #                      Permission.ACCESS_FINE_LOCATION])
@@ -75,17 +77,16 @@ class DemoApp(MDApp):
         if platform == "android":
             print("gps.py: Android detected. Requesting permissions")
             self.request_android_permissions()
-#########################################################################################
-#########################################################################################
-#########################################################################################
-#                DO THESE ONLY AFTER GETTING PERMISSIONS (i.e after they press allow)
-            #    Solution on chrome: https://stackoverflow.com/questions/41620466/android-permissions-perform-task-after-user-pressed-allow
 
-            print(f"--------- After permissions, waiting 5 seconds ---------")
-            Clock.schedule_once(self.start_gps, 5)  # after 5 secs, start gps
+            # Check if all permissions have been granted then get location
+            if self.all_permissions_granted:
+            # DO THESE ONLY AFTER GETTING PERMISSIONS (i.e after they press allow)
 
-            Clock.schedule_once(self.stop_gps, 9)  # after 5 secs, stop gps
-            print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
+                print(f"--------- After permissions, waiting 2 seconds ---------")
+                Clock.schedule_once(self.start_gps, 2)  # after 2 secs, start gps
+
+                Clock.schedule_once(self.stop_gps, 9)  # after 9 secs, stop gps
+                print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
 
     def build(self):
         # ------------------- Build kv file -------------------
