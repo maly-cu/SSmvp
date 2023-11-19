@@ -47,9 +47,19 @@ class DemoApp(MDApp):
         """
         from android.permissions import request_permissions, Permission
 
-        # To request permissions without a callback, do:
+        def callback(permissions, results):
+            """ Defines the callback to be fired when runtime permission has been granted or denied.
+            This is not strictly required, but added for the sake of completeness. """
+            if all([res for res in results]):
+                print(f"callback. All permissions granted.\nResults: {results}\nPermissions: {permissions}")
+            else:
+                print(f"callback. Some permissions refused.\nResults: {results}\nPermissions: {permissions}")
+
         request_permissions([Permission.ACCESS_COARSE_LOCATION,
-                             Permission.ACCESS_FINE_LOCATION])
+                             Permission.ACCESS_FINE_LOCATION], callback)
+        # To request permissions without a callback, do:
+        # request_permissions([Permission.ACCESS_COARSE_LOCATION,
+        #                      Permission.ACCESS_FINE_LOCATION])
 
     def on_start(self):
         self.theme_cls.primary_palette = "Orange"  # to set theme color for dialogue box
@@ -65,6 +75,11 @@ class DemoApp(MDApp):
         if platform == "android":
             print("gps.py: Android detected. Requesting permissions")
             self.request_android_permissions()
+#########################################################################################
+#########################################################################################
+#########################################################################################
+#                DO THESE ONLY AFTER GETTING PERMISSIONS (i.e after they press allow)
+            #    Solution on chrome: https://stackoverflow.com/questions/41620466/android-permissions-perform-task-after-user-pressed-allow
 
             print(f"--------- After permissions, waiting 5 seconds ---------")
             Clock.schedule_once(self.start_gps, 5)  # after 5 secs, start gps
