@@ -40,72 +40,6 @@ class DemoApp(MDApp):
     gps_status = StringProperty('Click Start to get GPS location updates')
     all_permissions_granted = False
 
-    def request_android_permissions(self):
-        """
-        Since API 23, Android requires permission to be requested at runtime. This function requests permission and handles the response via a callback.
-        The request will produce a popup if permissions have not already been granted, otherwise it will do nothing.
-        """
-        from android.permissions import request_permissions, Permission
-
-        def callback(permissions, results):
-            """ Defines the callback to be fired when runtime permission has been granted or denied.
-            This is not strictly required, but added for the sake of completeness. """
-            if all([res for res in results]):
-                self.all_permissions_granted = True
-                print(f"callback. All permissions granted.\nResults: {results}\nPermissions: {permissions}")
-                print(f"All Permissions set to: {self.all_permissions_granted}")
-                return True
-                # print(f"--------- After permissions, waiting 2 seconds ---------")
-                # Clock.schedule_once(self.start_gps, 2)  # after 2 secs, start gps
-                #
-                # Clock.schedule_once(self.stop_gps, 9)  # after 9 secs, stop gps
-                # print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
-
-            else:
-                print(f"callback. Some permissions refused.\nResults: {results}\nPermissions: {permissions}")
-
-        request_permissions([Permission.ACCESS_COARSE_LOCATION,
-                             Permission.ACCESS_FINE_LOCATION,
-                             Permission.INTERNET], callback)
-        # To request permissions without a callback, do:
-        # request_permissions([Permission.ACCESS_COARSE_LOCATION,
-        #                      Permission.ACCESS_FINE_LOCATION])
-
-    def on_start(self):
-        self.theme_cls.primary_palette = "Orange"  # to set theme color for dialogue box
-
-        try:
-            gps.configure(on_location=self.on_location,
-                          on_status=self.on_status)
-        except NotImplementedError:
-            import traceback
-            traceback.print_exc()
-            self.gps_status = 'GPS is not implemented for your platform'
-
-        if platform == "android":
-            print("gps.py: Android detected. Requesting permissions")
-
-            print(f"Permissions status: {self.all_permissions_granted}")
-            if self.request_android_permissions():
-                print(f"Permissions status: {self.all_permissions_granted}")
-
-        # NOT WORKING, PYTHON COMPILING ALL AT ONCE. PUTTING IN CALLBACK FUNCTION
-            # Check if all permissions have been granted then get location
-            # if self.all_permissions_granted is True:
-            # # DO THESE ONLY AFTER GETTING PERMISSIONS (i.e after they press allow)
-            #
-                print(f"--------- After permissions, waiting 2 seconds ---------")
-                Clock.schedule_once(self.start_gps, 2)  # after 2 secs, start gps
-
-                Clock.schedule_once(self.stop_gps, 9)  # after 9 secs, stop gps
-                print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
-
-    def build(self):
-        # ------------------- Build kv file -------------------
-        main_kv = Builder.load_file("demo.kv")
-        return main_kv
-
-
     @mainthread
     def on_location(self, **kwargs):
         self.gps_location = '\n'.join([
@@ -139,6 +73,74 @@ class DemoApp(MDApp):
             print("------------- GPS STOPPING -------------")
             gps.stop()
             print(f"--------- Final Co-ords - {self.gps_location} ---------")
+
+    def run_gps(self):
+        print(f"--------- After permissions, waiting 2 seconds ---------")
+        Clock.schedule_once(self.start_gps, 2)  # after 2 secs, start gps
+
+        Clock.schedule_once(self.stop_gps, 9)  # after 9 secs, stop gps
+        print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
+
+    def request_android_permissions(self):
+        """
+        Since API 23, Android requires permission to be requested at runtime. This function requests permission and handles the response via a callback.
+        The request will produce a popup if permissions have not already been granted, otherwise it will do nothing.
+        """
+        from android.permissions import request_permissions, Permission
+
+        def callback(permissions, results):
+            """ Defines the callback to be fired when runtime permission has been granted or denied.
+            This is not strictly required, but added for the sake of completeness. """
+            if all([res for res in results]):
+                self.all_permissions_granted = True
+                print(f"callback. All permissions granted.\nResults: {results}\nPermissions: {permissions}")
+                print(f"All Permissions set to: {self.all_permissions_granted}")
+                self.run_gps()
+            else:
+                print(f"callback. Some permissions refused.\nResults: {results}\nPermissions: {permissions}")
+
+        request_permissions([Permission.ACCESS_COARSE_LOCATION,
+                             Permission.ACCESS_FINE_LOCATION,
+                             Permission.INTERNET], callback)
+        # To request permissions without a callback, do:
+        # request_permissions([Permission.ACCESS_COARSE_LOCATION,
+        #                      Permission.ACCESS_FINE_LOCATION])
+
+    def on_start(self):
+        self.theme_cls.primary_palette = "Orange"  # to set theme color for dialogue box
+
+        try:
+            gps.configure(on_location=self.on_location,
+                          on_status=self.on_status)
+        except NotImplementedError:
+            import traceback
+            traceback.print_exc()
+            self.gps_status = 'GPS is not implemented for your platform'
+
+        if platform == "android":
+            print("gps.py: Android detected. Requesting permissions")
+
+            print(f"Permissions status: {self.all_permissions_granted}")
+            self.request_android_permissions()
+
+        # NOT WORKING, PYTHON COMPILING ALL AT ONCE. PUTTING IN CALLBACK FUNCTION
+            # Check if all permissions have been granted then get location
+            # if self.all_permissions_granted is True:
+            # # DO THESE ONLY AFTER GETTING PERMISSIONS (i.e after they press allow)
+            #
+            # print(f"--------- After permissions, waiting 2 seconds ---------")
+            # Clock.schedule_once(self.start_gps, 2)  # after 2 secs, start gps
+            #
+            # Clock.schedule_once(self.stop_gps, 9)  # after 9 secs, stop gps
+            # print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
+
+    def build(self):
+        # ------------------- Build kv file -------------------
+        main_kv = Builder.load_file("demo.kv")
+        return main_kv
+
+
+
 
     # def get_location(self):
     #     location = [self.gps_location].raw[]
