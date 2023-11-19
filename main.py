@@ -54,6 +54,12 @@ class DemoApp(MDApp):
                 self.all_permissions_granted = True
                 print(f"callback. All permissions granted.\nResults: {results}\nPermissions: {permissions}")
                 print(f"All Permissions set to: {self.all_permissions_granted}")
+                return True
+                # print(f"--------- After permissions, waiting 2 seconds ---------")
+                # Clock.schedule_once(self.start_gps, 2)  # after 2 secs, start gps
+                #
+                # Clock.schedule_once(self.stop_gps, 9)  # after 9 secs, stop gps
+                # print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
 
             else:
                 print(f"callback. Some permissions refused.\nResults: {results}\nPermissions: {permissions}")
@@ -78,13 +84,16 @@ class DemoApp(MDApp):
 
         if platform == "android":
             print("gps.py: Android detected. Requesting permissions")
-            self.request_android_permissions()
+
             print(f"Permissions status: {self.all_permissions_granted}")
+            if self.request_android_permissions():
+                print(f"Permissions status: {self.all_permissions_granted}")
 
+        # NOT WORKING, PYTHON COMPILING ALL AT ONCE. PUTTING IN CALLBACK FUNCTION
             # Check if all permissions have been granted then get location
-            if self.all_permissions_granted is True:
-            # DO THESE ONLY AFTER GETTING PERMISSIONS (i.e after they press allow)
-
+            # if self.all_permissions_granted is True:
+            # # DO THESE ONLY AFTER GETTING PERMISSIONS (i.e after they press allow)
+            #
                 print(f"--------- After permissions, waiting 2 seconds ---------")
                 Clock.schedule_once(self.start_gps, 2)  # after 2 secs, start gps
 
