@@ -51,8 +51,8 @@ class DemoApp(MDApp):
             """ Defines the callback to be fired when runtime permission has been granted or denied.
             This is not strictly required, but added for the sake of completeness. """
             if all([res for res in results]):
-                print(f"callback. All permissions granted.\nResults: {results}\nPermissions: {permissions}")
                 self.all_permissions_granted = True
+                print(f"callback. All permissions granted.\nResults: {results}\nPermissions: {permissions}")
                 print(f"All Permissions set to: {self.all_permissions_granted}")
 
             else:
