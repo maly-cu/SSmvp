@@ -79,7 +79,7 @@ class DemoApp(MDApp):
             self.request_android_permissions()
 
             # Check if all permissions have been granted then get location
-            if self.all_permissions_granted:
+            if self.all_permissions_granted is True:
             # DO THESE ONLY AFTER GETTING PERMISSIONS (i.e after they press allow)
 
                 print(f"--------- After permissions, waiting 2 seconds ---------")
