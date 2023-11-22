@@ -42,8 +42,9 @@ class DemoApp(MDApp):
 
     @mainthread
     def on_location(self, **kwargs):
-        self.gps_location = '\n'.join([
-            '{}={}'.format(k, v) for k, v in kwargs.items()])
+        # self.gps_location = '\n'.join([
+        #     '{}={}'.format(k, v) for k, v in kwargs.items()])
+        self.gps_location = {"lat": kwargs['lat'], "lon": kwargs['lon']}
 
     @mainthread
     def on_status(self, stype, status):
@@ -78,7 +79,7 @@ class DemoApp(MDApp):
         print(f"--------- After permissions, waiting 2 seconds ---------")
         Clock.schedule_once(self.start_gps, 2)  # after 2 secs, start gps
 
-        Clock.schedule_once(self.stop_gps, 9)  # after 9 secs, stop gps
+        Clock.schedule_once(self.stop_gps, 12)  # after 9 secs, stop gps
         print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
 
     def request_android_permissions(self):
@@ -134,21 +135,12 @@ class DemoApp(MDApp):
             # Clock.schedule_once(self.stop_gps, 9)  # after 9 secs, stop gps
             # print(f"--------- After 9 seconds, coords - {self.gps_location} ---------")
 
-    def build(self):
-        # ------------------- Build kv file -------------------
-        main_kv = Builder.load_file("demo.kv")
-        return main_kv
-
-
-
-
-    # def get_location(self):
-    #     location = [self.gps_location].raw[]
-    #     """ Get state and country location from lat and lon"""
-    #     # initialize Nominatim API
-    #     geolocator = Nominatim(user_agent="geoapiExercises")
-    #     # 4: Now get the information from the given list and parsed into a dictionary with raw function().
-    #     self.map_location = geolocator.reverse(self.gps_location['lat'] + "," + self.gps_location['lon']).raw['address']
+    # SINCE .kv file HAS SAME NAME AS APP, IT WILL RUN AUTOMATICALLY WITHOUT BUILD
+    # FOR NOW, as build function is empty, no need for it.
+    # def build(self):
+    #     # ------------------- Build kv file -------------------
+    #     main_kv = Builder.load_file("demo.kv")
+    #     return main_kv
 
     # TODO 2: Plyer Fancy notification with GPS coords
     def do_notify(self):
@@ -162,11 +154,20 @@ class DemoApp(MDApp):
                   'title': title, 'message': message, 'ticker': ticker}
         notification.notify(**kwargs)
 
+    # def get_location(self):
+    #     location = [self.gps_location].raw[]
+    #     """ Get state and country location from lat and lon"""
+    #     # initialize Nominatim API
+    #     geolocator = Nominatim(user_agent="geoapiExercises")
+    #     # 4: Now get the information from the given list and parsed into a dictionary with raw function().
+    #     self.map_location = geolocator.reverse(self.gps_location['lat'] + "," + self.gps_location['lon']).raw['address']
+
+    # TODO 3: Set alarm to send notification
+
 
 if __name__ == '__main__':
     DemoApp().run()
 
 
 
-# TODO 3: Set alarm to send notification
 # TODO 4: UI/UX logo, splash screen, name & loading animation
