@@ -44,7 +44,7 @@ class DemoApp(MDApp):
     def on_location(self, **kwargs):
         # self.gps_location = '\n'.join([
         #     '{}={}'.format(k, v) for k, v in kwargs.items()])
-        self.gps_location = {"lat": kwargs['lat'], "lon": kwargs['lon']}
+        self.gps_location = f"lat: {kwargs['lat']}, \nlon: {kwargs['lon']}"
 
     @mainthread
     def on_status(self, stype, status):
