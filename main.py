@@ -1,5 +1,5 @@
-import time
 from os.path import join, dirname, realpath
+from datetime import datetime, timedelta
 #from geopy.geocoders import Nominatim
 
 from plyer import gps
@@ -143,6 +143,24 @@ class DemoApp(MDApp):
     #     return main_kv
 
     # TODO 2: Plyer Fancy notification with GPS coords
+    def schedule(self, *args):
+        Clock.schedule_once(self.alarm, 1)  # after 2 secs, start gps
+
+    def alarm(self, *args):
+        # Get current time
+        current_time = datetime.now()
+
+        # Calculating future time using timedelta()
+        # after two hours
+        set_time = current_time + timedelta(minutes=2)
+
+        print(f'Reminder set at {current_time.time()}\b to go off at {set_time.time()}')
+
+        while True:
+            if set_time == current_time:
+                self.do_notify()
+                break
+
     def do_notify(self):
         title = 'Where are you??'
         message = self.gps_location
