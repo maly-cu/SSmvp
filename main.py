@@ -157,7 +157,7 @@ class DemoApp(MDApp):
         print(f'Reminder set at {current_time.time()}\b to go off at {set_time.time()}')
 
         while True:
-            if set_time == current_time:
+            if set_time == datetime.now():
                 self.do_notify()
                 break
 
