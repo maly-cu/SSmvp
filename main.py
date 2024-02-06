@@ -1,6 +1,9 @@
 from os.path import join, dirname, realpath
 from datetime import datetime, timedelta
 #from geopy.geocoders import Nominatim
+from jnius import autoclass, cast
+import time
+import json
 
 from plyer import gps
 from plyer import notification, vibrator
@@ -144,33 +147,78 @@ class DemoApp(MDApp):
 
     # TODO 2: Plyer Fancy notification with GPS coords
     def schedule(self, *args):
-        Clock.schedule_once(self.alarm, 1)  # after 2 secs, start gps
+        Clock.schedule_once(self.alarm, 1)  # after 2 secs, start alarm
 
     def alarm(self, *args):
-        # Get current time
-        current_time = datetime.now()
 
-        # Calculating future time using timedelta()
-        # after two hours
-        set_time = current_time + timedelta(minutes=2)
+        task_details = {'title': 'Screaaam', 'content': f'Reapply RIGHT NOW from {self.gps_location}', 'ticker': 'Heyyy!!'}
+        task = json.dumps(task_details)
+        print(f"Task: {task} of type {type(task)}")
 
-        print(f'Reminder set at {current_time.time()}\b to go off at {set_time.time()}')
+        # Gets the current running instance of the app so as to speak
+        mActivity = autoclass("org.kivy.android.PythonActivity").mActivity
 
-        while True:
-            if set_time == datetime.now():
-                self.do_notify()
-                break
+        context = mActivity.getApplicationContext()
+        Context = autoclass("android.content.Context")
+        Intent = autoclass("android.content.Intent")
+        # Bundle = autoclass("android.app.Bundle")
+        Bundle = autoclass("android.os.Bundle")
+        PendingIntent = autoclass("android.app.PendingIntent")
+        String = autoclass("java.lang.String")
+        Int = autoclass("java.lang.Integer")
+        AlarmManager = autoclass('android.app.AlarmManager')
+        Notify = autoclass('org.test.myapp.Notify')
 
-    def do_notify(self):
-        title = 'Where are you??'
-        message = self.gps_location
-        ticker = 'ticker?'
-        app_name = 'SunScream'
-        app_icon = join(dirname(realpath(__file__)), 'plyer-icon.png')
+        extras = Bundle()
+        # extras.putString("reminderTask", task)
+        extras.putString("title", task_details['title'])
+        extras.putString("content", task_details['content'])
+        extras.putString("ticker", task_details['ticker'])
 
-        kwargs = {'app_name': app_name, 'app_icon': app_icon,
-                  'title': title, 'message': message, 'ticker': ticker}
-        notification.notify(**kwargs)
+        intent = Intent()
+        intent.setClass(context, Notify)
+        # Add additional data to the intent. The name must include a package prefix, for example the app com.android.contacts would use names like "com.android.contacts.ShowAll".
+
+        intent.putExtras(extras)
+        intent.setAction("org.test.myapp.NOTIFY")
+        intent_id = 1
+
+        pending_intent = PendingIntent.getBroadcast(
+            context, intent_id, intent, PendingIntent.FLAG_CANCEL_CURRENT
+        )
+
+        ring_time = (time.time_ns() // 1_000_000) + 120_000
+        print(f'Ring time is {ring_time} of type {type(ring_time)}')
+
+        cast(
+            AlarmManager, context.getSystemService(Context.ALARM_SERVICE)
+        ).setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, ring_time, pending_intent)
+
+        # # Get current time
+        # current_time = datetime.now()
+        #
+        # # Calculating future time using timedelta()
+        # # after two hours
+        # set_time = current_time + timedelta(minutes=2)
+        #
+        # print(f'Reminder set at {current_time.time()}\b to go off at {set_time.time()}')
+        #
+        # while True:
+        #     if set_time == datetime.now():
+        #         self.do_notify()
+        #         break
+
+    # def do_notify(self):
+
+        # title = 'Where are you??'
+        # message = self.gps_location
+        # ticker = 'ticker?'
+        # app_name = 'SunScream'
+        # app_icon = join(dirname(realpath(__file__)), 'plyer-icon.png')
+        #
+        # kwargs = {'app_name': app_name, 'app_icon': app_icon,
+        #           'title': title, 'message': message, 'ticker': ticker}
+        # notification.notify(**kwargs)
 
     # def get_location(self):
     #     location = [self.gps_location].raw[]
